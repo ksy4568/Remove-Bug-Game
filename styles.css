@@ -1,0 +1,228 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  position: relative;
+  height: 100vh;
+  line-height: 1;
+  background: url("./assets/image/background.jpg");
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 30px 0 30px;
+}
+
+main {
+  width: 100%;
+  height: 70%;
+  margin-top: 20px;
+}
+
+.gameBtn,
+.bugCount {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 30px;
+  color: #e0f1f5;
+  background-color: #306691;
+}
+
+.gameBtn {
+  cursor: pointer;
+}
+
+.bugCount {
+  margin-top: 10px;
+}
+
+.timeBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  margin-top: 10px;
+  font-size: 30px;
+  border-radius: 20px;
+  background-color: #e0f1f5;
+}
+
+.gameView {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.gameModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 200px;
+  border-radius: 20px;
+  font-size: 30px;
+  background-color: #e0f1f5;
+  z-index: 1;
+}
+
+.replayGameBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  color: #e0f1f5;
+  background-color: #306691;
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+
+.replayGameBtn:hover {
+  transform: rotate(90deg);
+}
+
+.fullScreenModal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
