@@ -1,3 +1,4 @@
+// get DOM
 let header = document.querySelector('.header');
 let main = document.querySelector('.main');
 let gameView = document.querySelector('.gameView');
@@ -8,12 +9,14 @@ let modalMessage = document.querySelector('.modalMessage');
 let bugCount = document.querySelector('.bugCount');
 let replayBtn = document.querySelector('.replayGameBtn');
 
+// get Image
 let computerImg = './assets/image/computer.png';
 let bugImg = './assets/image/bug.png';
 
 // game state
 let countingBug = 10;
 let isStart = false;
+let time = undefined;
 
 
 // show Modal
@@ -40,25 +43,8 @@ const createImg = (el, pos, className) => {
     elImg.style.transform = 'scale(1, 1)';
   })
 
-  elImg.addEventListener('click', () => {
-    if(elImg.getAttribute('class') === 'computer') {
-      showModal('You Lose');
-      return;
-    }
-    if(elImg.getAttribute('class') === 'bug') {
-      elImg.parentNode.removeChild(elImg);
-      countingBug -= 1;
-      bugCount.innerHTML = countingBug;
-
-      if(countingBug === 0 ) {
-        showModal('You Win!!');
-      }
-    }
-  })
-
   return elImg;
 }
-
 
 const getRandomPosition = () => {
   let pos = {
@@ -66,8 +52,8 @@ const getRandomPosition = () => {
     y: 0,
   }
   let gameViewArea = gameView.getBoundingClientRect();
-  let gameViewWidth = gameViewArea.width - 80;
-  let gameViewHeight = gameViewArea.height - 80;
+  let gameViewWidth = gameViewArea.width - 90;
+  let gameViewHeight = gameViewArea.height - 90;
   
   pos.x = Math.floor(Math.random() * gameViewWidth + 1) + 1;
   pos.y = Math.floor(Math.random() * gameViewHeight + 1) + 1;
@@ -75,48 +61,71 @@ const getRandomPosition = () => {
   return pos;
 }
 
-
-const startGame = () => {
-  let seconds = 9;
-
-  const countingTime = () => {
-    timeBox.innerHTML = 10;
-
-    let times = setInterval(function () {
-      timeBox.innerHTML = seconds;
-      seconds -= 1;
-  
-      if(seconds === -1) {
-        gameBtn.innerHTML = '<i class="fas fa-play gameBtn"></i>';
-        showModal('You Lose')
-        clearInterval(times);
-      }
-    }, 1000)
-  }
-
-
-
-
-  gameBtn.addEventListener('click', () => {
-    bugCount.innerHTML = countingBug;
-    if(!isStart) {
-      gameBtn.innerHTML = '<i class="fas fa-stop gameBtn"></i>';
+const removeBug = () => {
+  gameView.addEventListener('click', (e) => {
+    if(e.target.matches('.computer')) {
+      showModal('You Lose');
       isStart = !isStart;
-      countingTime();
-
-      for(let i = 0; i < 10; i++) {
-        gameView.appendChild(createImg(computerImg, getRandomPosition(), "computer"));
-        gameView.appendChild(createImg(bugImg, getRandomPosition(), 'bug'));
-      } 
-    } else {
-      gameBtn.innerHTML = '<i class="fas fa-play gameBtn"></i>'
-      isStart = !isStart;
+      clearInterval(time);
+      return;
     }
-  });
+    if(e.target.matches('.bug')) {
+      gameView.removeChild(e.target);
+      countingBug -= 1;
+      bugCount.innerHTML = countingBug;
+
+      if(countingBug === 0 ) {
+        showModal('You Win!!');
+        isStart = !isStart;
+        clearInterval(time);
+      }
+      return;
+    }
+  })
+}
+removeBug();
+
+const countingTime = (seconds) => {
+  timeBox.innerHTML = 10;
+
+  time = setInterval(function () {
+    timeBox.innerHTML = seconds;
+    seconds -= 1;
+
+    if(seconds === -1) {
+      gameBtn.innerHTML = '<i class="fas fa-play gameBtn"></i>';
+      showModal('You Lose')
+      clearInterval(time);
+    }
+  }, 1000)
 }
 
 
+const startGame = () => {
+  bugCount.innerHTML = countingBug;
+  gameBtn.innerHTML = '<i class="fas fa-stop gameBtn"></i>';
+  isStart = !isStart;
+  countingTime(9);
 
+  for(let i = 0; i < countingBug; i++) {
+    gameView.appendChild(createImg(computerImg, getRandomPosition(), "computer"));
+    gameView.appendChild(createImg(bugImg, getRandomPosition(), 'bug'));
+  } 
+}
 
+replayBtn.addEventListener('click', () => {
+  countingBug = 10;
+  gameModal.style.display = 'none';
+  gameView.innerHTML = '';
+  startGame();
+})
 
-startGame();
+gameBtn.addEventListener('click', (e) => {
+  if(e.target.matches('.fa-play')) {
+    gameView.innerHTML = '';
+    startGame()
+  } else {
+    clearInterval(time);
+    gameBtn.innerHTML = '<i class="fas fa-play gameBtn"></i>'
+  }
+})
