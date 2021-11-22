@@ -9,3 +9,8 @@
 
 - HTML & CSS
 - JavaScript
+
+### 𝑽 version
+
+- 1.0 : 주요 기능 구현
+    - 기본적인 UI 및 동작 구현
