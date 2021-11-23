@@ -1,6 +1,4 @@
 // get DOM
-let header = document.querySelector('.header');
-let main = document.querySelector('.main');
 let gameView = document.querySelector('.gameView');
 let timeBox = document.querySelector('.timeBox');
 let gameBtn = document.querySelector('.gameBtn');
@@ -9,44 +7,40 @@ let modalMessage = document.querySelector('.modalMessage');
 let bugCount = document.querySelector('.bugCount');
 let replayBtn = document.querySelector('.replayGameBtn');
 
-// get Image
-let computerImg = './assets/image/computer.png';
-let bugImg = './assets/image/bug.png';
+// get Icon
+let playIcon = '<i class="fas fa-play gameBtn"></i>';
+let stopIcon = '<i class="fas fa-stop gameBtn"></i>';
 
-// game state
-let countingBug = 10;
-let isStart = false;
-let time = undefined;
+// game const
+let BUG_NUM = 10;
+let IS_START = false;
+let REMAINING_TIME = undefined;
+let CHARACTER = {
+  bug: {name: 'bug', link: './assets/image/bug.png'},
+  computer: {name: 'computer', link: './assets/image/computer.png'}
+}
 
 
-// show Modal
-const showModal = (message) => {
-  gameModal.style.display = 'flex';
+// toggle Modal
+const toggleModal = (isOn, message) => {
+  if(isOn) gameModal.style.display = 'flex';
+  if(!isOn) gameModal.style.display = 'none';
+
   modalMessage.innerHTML = message;
 }
 
 // create Image
-const createImg = (el, pos, className) => {
-  let elImg = new Image(80, 80);
-  elImg.src = el;
-  elImg.setAttribute('class', className);
-  elImg.style.position = 'absolute';
-  elImg.style.left = `${pos.x}px`;
-  elImg.style.top = `${pos.y}px`;
-  elImg.style.transition = 'all ease 0.3s'
-  elImg.style.cursor = 'pointer';
+const createImg = (charactor, pos, className) => {
+  let charactorImg = new Image(80, 80);
+  charactorImg.src = charactor;
+  charactorImg.setAttribute('class', className);
+  charactorImg.style.left = `${pos.x}px`;
+  charactorImg.style.top = `${pos.y}px`;
 
-  elImg.addEventListener('mouseover', () => {
-    elImg.style.transform = 'scale(1.2, 1.2)';
-  })
-  elImg.addEventListener('mouseleave', () => {
-    elImg.style.transform = 'scale(1, 1)';
-  })
-
-  return elImg;
+  return charactorImg;
 }
 
-const getRandomPosition = () => {
+const getRandomPosition = (gameView) => {
   let pos = {
     x: 0,
     y: 0,
@@ -61,71 +55,75 @@ const getRandomPosition = () => {
   return pos;
 }
 
+const stopGame = (message) => {
+  toggleModal(IS_START, message);
+  IS_START = !IS_START;
+  clearTimeout(REMAINING_TIME);
+  REMAINING_TIME = undefined;
+}
+
 const removeBug = () => {
   gameView.addEventListener('click', (e) => {
     if(e.target.matches('.computer')) {
-      showModal('You Lose');
-      isStart = !isStart;
-      clearInterval(time);
+      stopGame('노트북을 뿌시다니...')
       return;
     }
     if(e.target.matches('.bug')) {
       gameView.removeChild(e.target);
-      countingBug -= 1;
-      bugCount.innerHTML = countingBug;
+      BUG_NUM -= 1;
+      bugCount.innerHTML = BUG_NUM;
 
-      if(countingBug === 0 ) {
-        showModal('You Win!!');
-        isStart = !isStart;
-        clearInterval(time);
+      if(BUG_NUM === 0 ) {
+        stopGame('버그 박멸 성공!!');
       }
-      return;
     }
   })
 }
 removeBug();
 
 const countingTime = (seconds) => {
-  timeBox.innerHTML = 10;
-
-  time = setInterval(function () {
+  REMAINING_TIME = function () {
     timeBox.innerHTML = seconds;
     seconds -= 1;
 
-    if(seconds === -1) {
-      gameBtn.innerHTML = '<i class="fas fa-play gameBtn"></i>';
-      showModal('You Lose')
-      clearInterval(time);
+    if(seconds < 0) {
+      gameBtn.innerHTML = playIcon;
+      stopGame('배포 예정일이 지났습니다..');
+      clearTimeout(REMAINING_TIME);
+      return;
     }
-  }, 1000)
+
+    setTimeout(REMAINING_TIME, 1000);
+  }
+
+  setTimeout(REMAINING_TIME, 0);
 }
 
 
 const startGame = () => {
-  bugCount.innerHTML = countingBug;
-  gameBtn.innerHTML = '<i class="fas fa-stop gameBtn"></i>';
-  isStart = !isStart;
-  countingTime(9);
+  bugCount.innerHTML = BUG_NUM;
+  gameBtn.innerHTML = stopIcon;
+  gameView.innerHTML = '';
+  IS_START = !IS_START;
+  countingTime(10);
 
-  for(let i = 0; i < countingBug; i++) {
-    gameView.appendChild(createImg(computerImg, getRandomPosition(), "computer"));
-    gameView.appendChild(createImg(bugImg, getRandomPosition(), 'bug'));
+  for(let i = 0; i < BUG_NUM; i++) {
+    gameView.appendChild(createImg(CHARACTER.computer.link, getRandomPosition(gameView), "computer"));
+    gameView.appendChild(createImg(CHARACTER.bug.link, getRandomPosition(gameView), 'bug'));
   } 
 }
 
 replayBtn.addEventListener('click', () => {
-  countingBug = 10;
-  gameModal.style.display = 'none';
-  gameView.innerHTML = '';
+  BUG_NUM = 10;
+  toggleModal(IS_START);
   startGame();
 })
 
 gameBtn.addEventListener('click', (e) => {
   if(e.target.matches('.fa-play')) {
-    gameView.innerHTML = '';
     startGame()
   } else {
-    clearInterval(time);
-    gameBtn.innerHTML = '<i class="fas fa-play gameBtn"></i>'
+    stopGame('다시 도전하시겠습니까?');
+    gameBtn.innerHTML = playIcon;
   }
 })

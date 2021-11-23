@@ -226,3 +226,29 @@ main {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+.bug,
+.computer {
+  position: absolute;
+  transition: all ease 0.3s;
+  cursor: pointer;
+}
+
+.bug:hover,
+.computer:hover {
+  transform: scale(1.2, 1.2);
+}
+
+.bug:hover {
+  animation: 0.1s linear infinite alternate shake;
+}
+
+@keyframes shake {
+  from {
+    transform: rotate(10deg) scale(1.1, 1.1);
+  }
+
+  to {
+    transform: rotate(0deg) scale(1, 1);
+  }
+}
