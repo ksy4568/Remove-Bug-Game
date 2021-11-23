@@ -10,6 +10,6 @@
 - HTML & CSS
 - JavaScript
 
-### 𝑽 version
+### ⚙️ version
 
 - 1.0 : 기본적인 UI 및 동작 구현
