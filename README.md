@@ -13,3 +13,4 @@
 ### ⚙️ version
 
 - 1.0 : 기본적인 UI 및 동작 구현
+- 1.0.1 : Refactoring : modal class 
