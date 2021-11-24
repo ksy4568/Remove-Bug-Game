@@ -1,4 +1,5 @@
 import Modal from './modal.js';
+import View from './view.js';
 
 // get DOM
 let gameView = document.querySelector('.gameView');
@@ -12,6 +13,7 @@ let playIcon = '<i class="fas fa-play gameBtn"></i>';
 let stopIcon = '<i class="fas fa-stop gameBtn"></i>';
 
 // game const
+let ICON_SIZE = 80;
 let BUG_NUM = 10;
 let IS_START = false;
 let REMAINING_TIME = undefined;
@@ -21,32 +23,7 @@ let CHARACTER = {
 }
 
 let modal = new Modal();
-
-// create Image
-const createImg = (charactor, pos, className) => {
-  let charactorImg = new Image(80, 80);
-  charactorImg.src = charactor;
-  charactorImg.setAttribute('class', className);
-  charactorImg.style.left = `${pos.x}px`;
-  charactorImg.style.top = `${pos.y}px`;
-
-  return charactorImg;
-}
-
-const getRandomPosition = (gameView) => {
-  let pos = {
-    x: 0,
-    y: 0,
-  }
-  let gameViewArea = gameView.getBoundingClientRect();
-  let gameViewWidth = gameViewArea.width - 90;
-  let gameViewHeight = gameViewArea.height - 90;
-  
-  pos.x = Math.floor(Math.random() * gameViewWidth + 1) + 1;
-  pos.y = Math.floor(Math.random() * gameViewHeight + 1) + 1;
-
-  return pos;
-}
+let view = new View(ICON_SIZE);
 
 const stopGame = (message) => {
   modal.toggle(IS_START, message);
@@ -101,8 +78,8 @@ const startGame = () => {
   countingTime(10);
 
   for(let i = 0; i < BUG_NUM; i++) {
-    gameView.appendChild(createImg(CHARACTER.computer.link, getRandomPosition(gameView), "computer"));
-    gameView.appendChild(createImg(CHARACTER.bug.link, getRandomPosition(gameView), 'bug'));
+    gameView.appendChild(view.createImg(CHARACTER.computer.link, CHARACTER.computer.name));
+    gameView.appendChild(view.createImg(CHARACTER.bug.link, CHARACTER.bug.name));
   } 
 }
 
