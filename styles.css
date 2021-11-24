@@ -217,7 +217,7 @@ main {
 }
 
 .fullScreenModal {
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
@@ -251,4 +251,8 @@ main {
   to {
     transform: rotate(0deg) scale(1, 1);
   }
+}
+
+.hide {
+  display: none;
 }
