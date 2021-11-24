@@ -1,9 +1,9 @@
+import Modal from './modal.js';
+
 // get DOM
 let gameView = document.querySelector('.gameView');
 let timeBox = document.querySelector('.timeBox');
 let gameBtn = document.querySelector('.gameBtn');
-let gameModal = document.querySelector('.fullScreenModal');
-let modalMessage = document.querySelector('.modalMessage');
 let bugCount = document.querySelector('.bugCount');
 let replayBtn = document.querySelector('.replayGameBtn');
 
@@ -20,14 +20,7 @@ let CHARACTER = {
   computer: {name: 'computer', link: './assets/image/computer.png'}
 }
 
-
-// toggle Modal
-const toggleModal = (isOn, message) => {
-  if(isOn) gameModal.style.display = 'flex';
-  if(!isOn) gameModal.style.display = 'none';
-
-  modalMessage.innerHTML = message;
-}
+let modal = new Modal();
 
 // create Image
 const createImg = (charactor, pos, className) => {
@@ -56,7 +49,7 @@ const getRandomPosition = (gameView) => {
 }
 
 const stopGame = (message) => {
-  toggleModal(IS_START, message);
+  modal.toggle(IS_START, message);
   IS_START = !IS_START;
   clearTimeout(REMAINING_TIME);
   REMAINING_TIME = undefined;
@@ -115,7 +108,7 @@ const startGame = () => {
 
 replayBtn.addEventListener('click', () => {
   BUG_NUM = 10;
-  toggleModal(IS_START);
+  modal.toggle(IS_START);
   startGame();
 })
 
